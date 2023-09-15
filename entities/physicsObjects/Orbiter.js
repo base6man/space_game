@@ -1,8 +1,6 @@
 class Orbiter extends PhysicsObject{
     constructor(position = new Vector(0, 0), velocity = new Vector(0, 0), radius){
-        super(position, velocity);
-
-        
+        super(position, velocity);        
         this.acceleration = new Vector(0, 0)
 
         this.radius = this.collider.radius;
