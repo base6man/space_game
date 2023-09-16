@@ -3,7 +3,7 @@ class Scene{
 
         if(this.constructor === Scene) throw new Error("Scene is an abstract class!");
 
-        this.camera;
+        this.camera = new Camera();
         this.isOver = false;
     }
 
@@ -12,7 +12,7 @@ class Scene{
     }
 
     update(){
-        //this.camera.update();
+        this.camera.update();
     }
 
     updateImages(){

@@ -10,4 +10,8 @@ class PhysicsObject{
         this.position.x += this.velocity.x * time.deltaTime;
         this.position.y += this.velocity.y * time.deltaTime;
     }
+
+    get MASS(){
+        return 1;
+    }
 }

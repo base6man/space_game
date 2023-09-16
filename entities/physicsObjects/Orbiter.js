@@ -1,22 +1,34 @@
 class Orbiter extends PhysicsObject{
-    constructor(position = new Vector(0, 0), velocity = new Vector(0, 0), radius){
+    constructor(radius, position, velocity){
         super(position, velocity);        
         this.acceleration = new Vector(0, 0)
 
+        this.collider = new CircleCollider(this, radius);        
         this.radius = this.collider.radius;
+        this.planet;
+
         this.color = color;
         this.animator = new Animator(new Vector(this.radius + 5, this.radius + 5));
         this.animator.addImage(this.drawImage(), new Vector(0, 0))
+        currentScene.imageObjects[1].push(this);
 
         this.isDeleted = false;
 
         this.friction = 0;
 
-        currentScene.imageObjects[1].push(this);
+        
+
+        this.bouncedThisFrame = false;
+        this.previousVelocity = new Vector(0, 0)
     }
 
     get planets(){
         return currentScene.planetObjects;
+    }
+
+    get MASS(){
+        if(this.planet) return this.planet.MASS;
+        else{ return super.MASS(); }
     }
 
     update(){
@@ -31,13 +43,17 @@ class Orbiter extends PhysicsObject{
         for(let i of this.planets){
             if(i.physicsObject === this) continue;
             
-            let gravityMagnitude = 1/(this.position.subtract(i.position).sqrMagnitude) * i.mass * GRAVITY_MULTIPLIER;
+            let gravityMagnitude = 1/(this.position.subtract(i.position).sqrMagnitude) * i.MASS * GRAVITY_MULTIPLIER;
                 
             this.velocity.x -= (this.position.x - i.position.x) * time.deltaTime * gravityMagnitude;
             this.velocity.y -= (this.position.y - i.position.y) * time.deltaTime * gravityMagnitude;
         }
         this.acceleration.x = (this.velocity.x - tempVelocity.x) * STEPS;
         this.acceleration.y = (this.velocity.y - tempVelocity.y) * STEPS;
+        
+        if(this.bouncedThisFrame) console.log(this.previousVelocity, this.velocity);
+        this.bouncedThisFrame = false;
+        this.previousVelocity = this.velocity.copy();
     }
 
     updateImage(){

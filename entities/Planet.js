@@ -3,18 +3,18 @@
 class Planet{
     /**
      * @brief A body of gravitational influence. Not a physics object.
-     * @param {*} mass the planet's gravitational force 
+     * @param {*} MASS the planet's gravitational force 
      * @param {*} physicsObject use this if you want the planet to move
      */
-    constructor(mass = 1, physicsObject = new PhysicsObject(new Vector(0, 0), new Vector(0, 0))){
+    constructor(MASS = 1, physicsObject = new PhysicsObject(new Vector(0, 0), new Vector(0, 0))){
         this.physicsObject = physicsObject;
+        this.physicsObject.planet = this;
 
-        this.mass = mass
+        this.MASS = MASS;
 
-
-        let maxCanvasSize = Animator.calculateGravityFieldSize(this.mass);
+        let maxCanvasSize = Animator.calculateGravityFieldSize(this.MASS);
         this.animator = new Animator(new Vector(maxCanvasSize, maxCanvasSize));
-        this.animator.drawGravityField(this.mass)
+        this.animator.drawGravityField(this.MASS)
 
         currentScene.imageObjects[0].push(this);
         currentScene.planetObjects.push(this);
@@ -34,7 +34,7 @@ class Planet{
 
     updateImage(){
         this.animator.updateImage(this.position);
-        //currentScene.drawCircle(this.mass, this.position);
+        //currentScene.drawCircle(this.MASS, this.position);
     }
     /*
     bounce(other, dist){
@@ -71,14 +71,14 @@ class Planet{
         // This was the algorithm I was given. I hope it never breaks
         let p = 2 * (this.xVel * newVector.x + this.yVel * newVector.y - 
                     other.xVel * newVector.x - other.yVel * newVector.y) / 
-                    (this.mass + other.mass); 
+                    (this.MASS + other.MASS); 
         
         
         // Collision elasticity
-        this.xVel =  this.xVel - p * other.mass * newVector.x * 0.99; 
-        this.yVel =  this.yVel - p * other.mass * newVector.y * 0.99; 
-        other.xVel = other.xVel + p * this.mass * newVector.x * 0.99; 
-        other.yVel = other.yVel + p * this.mass * newVector.y * 0.99;
+        this.xVel =  this.xVel - p * other.MASS * newVector.x * 0.99; 
+        this.yVel =  this.yVel - p * other.MASS * newVector.y * 0.99; 
+        other.xVel = other.xVel + p * this.MASS * newVector.x * 0.99; 
+        other.yVel = other.yVel + p * this.MASS * newVector.y * 0.99;
         
         let i = 0
         

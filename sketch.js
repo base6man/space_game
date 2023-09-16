@@ -1,7 +1,7 @@
 let time;
 let isFirstFrame = true;
 const GLOBAL_TIMESCALE = 1.0;
-const STEPS = 1;
+const STEPS = 10;
 
 const GRAVITY_MULTIPLIER = 1000;
 

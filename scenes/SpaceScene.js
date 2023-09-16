@@ -15,11 +15,16 @@ class SpaceScene extends Scene{
     setup(){
         super.setup();
 
-        new Orbiter(new Vector(300, 0), new Vector(150, -150))
-        new Planet(100),
-        new Planet(50, new Orbiter(new Vector(-200, 300), new Vector(250, 0)))
+        let centralPlanet = new Planet(60)
+        let smallestPlanet = new Planet(30, new Orbiter(50, new Vector(300, 0), new Vector(0, -500)))
 
-        //new Planet(20, new Orbiter(new Vector(300, 0), new Vector(150, -150)))
+        for(let i = 0; i < 2*Math.PI; i+=2*Math.PI/10){
+            let startPosition = new Vector(200, 0).setAngle(i);
+            let startVelocity = new Vector(0, 250).setAngle(i + Math.PI/2);
+            new Planet(12, new Orbiter(20, startPosition, startVelocity))
+        }
+        
+        this.camera.setTarget(centralPlanet)
     }
 
     update(){

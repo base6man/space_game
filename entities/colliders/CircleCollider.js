@@ -1,4 +1,4 @@
-class CircleCollider{
+class CircleCollider extends Collider{
     constructor(parent, radius, isTrigger = false){
         super(parent);
         this.radius = radius;
@@ -7,99 +7,78 @@ class CircleCollider{
     }
 
     update(){
-        for(let i = this.colliders.length-1; i >= 0; i--){
-            if(this.colliders[i] == this) continue;
+        for(let i of this.colliders){
+            if(i === this) continue;
             
-            let dist = Math.sqrt(
-                Math.pow(this.parent.position.x - this.colliders[i].parent.position.x, 2) +
-                Math.pow(this.parent.position.y - this.colliders[i].parent.position.y, 2));
+            let dist = Math.sqrt(Math.pow(this.position.x - i.position.x, 2) + Math.pow(this.position.y - i.position.y, 2));
             
-            if(dist < (this.radius + this.colliders[i].radius) / 2){
+            if(dist < (this.radius + i.radius) / 2){
                 
-                this.bounce(this.colliders[i], dist);
+                this.bounce(i, dist);
             }
             
         }
     }
 
-    bounce(){
-        // accessing all variables
-        {
-            myXPos = this.parent.position.x
-            myYPos = this.parent.position.y
-            myXVel = this.parent.velocity.x
-            myYVel = this.parent.velocity.y
-            otherXPos = other.parent.position.x
-            otherYPos = other.parent.position.y
-            otherXVel = other.parent.velocity.x
-            otherYVel = other.parent.velocity.y
-        }
+    bounce(other, dist){
+        let previousVelocity = this.velocity.copy();
 
-
-        let newVector = new Vector((otherXPos - myXPos) / dist, (otherYPos - myYPos) / dist); 
+        let newVector = new Vector((other.position.x - this.position.x) / dist, (other.position.y - this.position.y) / dist); 
         
         // I didn't cite the source when I wrote this code
         // This was the algorithm I was given. I hope it never breaks
-        let p = 2 * (myXVel * newVector.x + myYVel * newVector.y - 
-                    otherXVel * newVector.x - otherYVel * newVector.y) / 
-                    (this.mass + other.mass); 
-        
+        let p = 2 * (this.velocity.x * newVector.x + this.velocity.y * newVector.y - 
+                    other.velocity.x * newVector.x - other.velocity.y * newVector.y) / 
+                    (this.MASS + other.MASS); 
         
         // Collision elasticity
-        myXVel =  myXVel - p * other.mass * newVector.x * 0.99; 
-        myYVel =  myYVel - p * other.mass * newVector.y * 0.99; 
-        otherXVel = otherXVel + p * this.mass * newVector.x * 0.99; 
-        otherYVel = otherYVel + p * this.mass * newVector.y * 0.99;
+        this.velocity.x =  this.velocity.x - p * other.MASS * newVector.x * 0.99; 
+        this.velocity.y =  this.velocity.y - p * other.MASS * newVector.y * 0.99; 
+        other.velocity.x = other.velocity.x + p * this.MASS * newVector.x * 0.99; 
+        other.velocity.y = other.velocity.y + p * this.MASS * newVector.y * 0.99;
         
-        let i = 0
-        
-        while(Math.sqrt(Math.pow(myXPos - otherXPos, 2) + Math.pow(myYPos - otherYPos, 2)) < (this.size + other.size)/2)
+        let i = 0        
+        while(Math.sqrt(Math.pow(this.position.x - other.position.x, 2) + 
+                        Math.pow(this.position.y - other.position.y, 2)) < 
+                        (this.radius + other.radius)/2)
         {
-            myXPos += myXVel * timeElapsed;
-            myYPos += myYVel * timeElapsed;
-            otherXPos += otherXVel * timeElapsed;
-            otherYPos += otherYVel * timeElapsed;
+            this.position.x += this.velocity.x * time.deltaTime;
+            this.position.y += this.velocity.y * time.deltaTime;
+            other.position.x += other.velocity.x * time.deltaTime;
+            other.position.y += other.velocity.y * time.deltaTime;
 
             i++
         }
+        
+        this.parent.bouncedThisFrame = true;
+        console.log(previousVelocity, this.velocity);
 
 
-
+        // Landing code, will probably rewrite
+        /*
         let velocityDiff = Math.sqrt(
-            Math.pow(myXVel - otherXVel, 2) +
-            Math.pow(myYVel - otherYVel, 2));
+            Math.pow(this.velocity.x - this.velocity.x, 2) +
+            Math.pow(this.velocity.y - this.velocity.y, 2));
 
         if(velocityDiff < 100){
 
             if(this.isEarth){
-                myXVel = otherXVel;
-                myYVel = otherYVel;
+                this.velocity.x = this.velocity.x;
+                this.velocity.y = this.velocity.y;
             }
             else if (other.isEarth){
-                otherXVel = myXVel;
-                otherYVel = myYVel;
+                this.velocity.x = this.velocity.x;
+                this.velocity.y = this.velocity.y;
             }
             else{
-                let tempxVel = myXVel;
-                let tempyVel = myYVel;
-                myXVel += 2*(otherXVel - myXVel);
-                myYVel += 2*(otherYVel - myYVel);
-                otherXVel += 2*(tempxVel - otherXVel);
-                otherYVel += 2*(tempyVel - otherYVel);
+                let tempxVel = this.velocity.x;
+                let tempyVel = this.velocity.y;
+                this.velocity.x += 2*(this.velocity.x - this.velocity.x);
+                this.velocity.y += 2*(this.velocity.y - this.velocity.y);
+                this.velocity.x += 2*(tempxVel - this.velocity.x);
+                this.velocity.y += 2*(tempyVel - this.velocity.y);
             }
         }
-
-        // redistributing variables
-        {
-            this.parent.position.x =  myXPos
-            this.parent.position.y =  myYPos
-            this.parent.velocity.x =  myXVel
-            this.parent.velocity.y =  myYVel
-            other.parent.position.x = otherXPos
-            other.parent.position.y = otherYPos
-            other.parent.velocity.x = otherXVel
-            other.parent.velocity.y = otherYVel
-        }
-     
+        */
     }
 }
