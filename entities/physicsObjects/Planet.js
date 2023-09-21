@@ -1,4 +1,4 @@
-class Orbiter extends PhysicsObject{
+class Planet extends PhysicsObject{
     constructor(radius, position, velocity){
         super(position, velocity);        
         this.acceleration = new Vector(0, 0)

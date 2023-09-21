@@ -1,6 +1,6 @@
 
 
-class Planet{
+class GravityObject{
     /**
      * @brief A body of gravitational influence. Not a physics object.
      * @param {*} MASS the planet's gravitational force 
