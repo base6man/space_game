@@ -7,28 +7,63 @@ class FixedMotionObject{
     constructor(motion, args){
         this.motion = motion;
         this.args = args;
-
-        this.position = this.motion(0, this.args);
-        this.velocity = this.motion(1, this.args).subtract(this.motion(0, this.args));
+        
+        currentScene.physicsObjects.push(this);
+        currentScene.imageObjects[1].push(this);
+        
+        this.animator = new Animator(new Vector(100, 100));
+        this.animator.addImage(this.drawImage(), new Vector(0, 0))
 
         this.startTime = time.runtime;
         
-        currentScene.physicsObjects.push(this);
+    }
+
+    getArgs(time){
+        let newArgs = [time];
+        for(let i of this.inputArgs){
+            newArgs.push(i);
+        }
+        console.log(newArgs)
+        return newArgs;
     }
 
     get runtime(){
         return time.runtime - this.startTime;
     }
 
-    update(){
-        this.position = this.motion(this.runtime, this.args);
-        this.velocity = this.motion(this.runtime + 1, this.args).subtract(this.motion(this.runtime, this.args));
+    get position(){
+        return this.motion(this.runtime, ...this.args)
+        return this[this.motion](this.getArgs(this.runtime));
+    }
 
-        console.log(this.position);
+    get velocity(){
+        let deltaTime = 0.01;
+        //let futurePosition = this[this.motion](this.getArgs(this.runtime));
+        let futurePosition = this.motion(this.runtime + deltaTime, ...this.args);
+
+        return futurePosition.subtract(this.position).divide(deltaTime);
+    }
+
+    update(){
+        // Do nothing?
+    }
+
+    updateImage(){
+        this.animator.updateImage(this.position);
+    }
+
+    drawImage(){
+        let newImage = createGraphics(100, 100)
+        newImage.fill('white')
+        newImage.stroke('black')
+        newImage.strokeWeight(5);
+        newImage.circle(newImage.width/2, newImage.height/2, 95)
+        return newImage;
     }
 
     static circularMotion(time, startingAngle, speed, radius){
         let angle = startingAngle + speed*time;
+        console.log(time, startingAngle, speed, radius);
         return Vector.pseudovectorToVector(radius, angle);
     }
 

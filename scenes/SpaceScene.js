@@ -15,9 +15,10 @@ class SpaceScene extends Scene{
     setup(){
         super.setup();
 
-        let centralPlanet = new GravityObject(60)
-        let firstPlanet = new GravityObject(15, new FixedMotionObject(FixedMotionObject.stillMotion, [new Vector(100, 0)]))
+        let centralPlanet = new Planet(60)
+        let firstPlanet = new Planet(45, new FixedMotionObject(FixedMotionObject.circularMotion, [0, 0.5, 300]))
         
+        let me = new Orbiter(10, new Vector(0, -200), new Vector(100, 0))
         this.camera.setTarget(centralPlanet)
     }
 
