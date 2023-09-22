@@ -19,7 +19,7 @@ class SpaceScene extends Scene{
         let firstPlanet = new Planet(45, new FixedMotionObject(FixedMotionObject.circularMotion, [0, 0.5, 300]))
         
         let me = new Orbiter(10, new Vector(0, -200), new Vector(100, 0))
-        this.camera.setTarget(centralPlanet)
+        this.camera.setTarget(me)
     }
 
     update(){

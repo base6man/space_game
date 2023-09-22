@@ -28,7 +28,7 @@ class Orbiter extends PhysicsObject{
 
     get MASS(){
         if(this.planet) return this.planet.MASS;
-        else{ return super.MASS(); }
+        else{ return super.MASS; }
     }
 
     update(){

@@ -11,11 +11,15 @@ class FixedMotionObject{
         currentScene.physicsObjects.push(this);
         currentScene.imageObjects[1].push(this);
         
-        this.animator = new Animator(new Vector(100, 100));
+        this.radius = 100;
+        this.collider = new CircleCollider(this, this.radius);        
+        
+        this.animator = new Animator(new Vector(this.radius + 5, this.radius + 5));
         this.animator.addImage(this.drawImage(), new Vector(0, 0))
 
         this.startTime = time.runtime;
         
+        this.mass = 99999;
     }
 
     getArgs(time){
@@ -53,17 +57,16 @@ class FixedMotionObject{
     }
 
     drawImage(){
-        let newImage = createGraphics(100, 100)
+        let newImage = createGraphics(this.radius + 5, this.radius + 5)
         newImage.fill('white')
         newImage.stroke('black')
         newImage.strokeWeight(5);
-        newImage.circle(newImage.width/2, newImage.height/2, 95)
+        newImage.circle(newImage.width/2, newImage.height/2, this.radius)
         return newImage;
     }
 
     static circularMotion(time, startingAngle, speed, radius){
         let angle = startingAngle + speed*time;
-        console.log(time, startingAngle, speed, radius);
         return Vector.pseudovectorToVector(radius, angle);
     }
 
