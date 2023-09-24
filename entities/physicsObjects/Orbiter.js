@@ -1,4 +1,4 @@
-class Orbiter extends PhysicsObject{
+class Orbiter extends KinematicObject{
     constructor(radius, position, velocity){
         super(position, velocity);        
         this.acceleration = new Vector(0, 0)
@@ -7,9 +7,8 @@ class Orbiter extends PhysicsObject{
         this.radius = this.collider.radius;
         this.planet;
 
-        this.color = color;
         this.animator = new Animator(new Vector(this.radius + 5, this.radius + 5));
-        this.animator.addImage(this.drawImage(), new Vector(0, 0))
+        this.animator.addImage(drawCircle(this.radius), new Vector(0, 0))
         currentScene.imageObjects[1].push(this);
 
         this.isDeleted = false;
@@ -58,14 +57,5 @@ class Orbiter extends PhysicsObject{
 
     updateImage(){
         this.animator.updateImage(this.position);
-    }
-
-    drawImage(){
-        let newImage = createGraphics(this.radius + 5, this.radius + 5)
-        newImage.fill('white')
-        newImage.stroke('black')
-        newImage.strokeWeight(5);
-        newImage.circle(newImage.width/2, newImage.height/2, this.radius)
-        return newImage;
     }
 }

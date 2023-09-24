@@ -6,7 +6,7 @@ class Planet{
      * @param {*} MASS the planet's gravitational force 
      * @param {*} physicsObject use this if you want the planet to move
      */
-    constructor(MASS = 1, physicsObject = new PhysicsObject(new Vector(0, 0), new Vector(0, 0))){
+    constructor(MASS = 1, physicsObject = new PhysicsObject(new Vector(0, 0))){
         this.physicsObject = physicsObject;
         this.physicsObject.planet = this;
 

@@ -178,3 +178,12 @@ function endScene(){
 
   background(0)
 }
+
+function drawCircle(radius){
+    let newImage = createGraphics(radius + 5, radius + 5)
+    newImage.fill('white')
+    newImage.stroke('black')
+    newImage.strokeWeight(5);
+    newImage.circle(newImage.width/2, newImage.height/2, radius)
+    return newImage;
+}

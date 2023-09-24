@@ -18,7 +18,8 @@ class SpaceScene extends Scene{
         let centralPlanet = new Planet(60)
         let firstPlanet = new Planet(45, new FixedMotionObject(FixedMotionObject.circularMotion, [0, 0.5, 300]))
         
-        let me = new Orbiter(10, new Vector(0, -200), new Vector(100, 0))
+        let me = new Orbiter(80, new Vector(0, -200), new Vector(100, 0))
+        let walker = new Walker(firstPlanet.physicsObject, 0, Walker.playerInputMotion, [300], 30)
         this.camera.setTarget(me)
     }
 

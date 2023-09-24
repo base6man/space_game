@@ -9,11 +9,18 @@ class CircleCollider extends Collider{
     update(){
         for(let i of this.colliders){
             if(i === this) continue;
+
+            //for(let j of this.doNotCollide) if(j === i) continue;
+            //for(let j of i.doNotCollide) if(j === this) continue;
+            
+            // This will work as long as doNotCollide never exceeds 1 item
+            // You can always add another one if it'll never exceed 2
+            if(i.doNotCollide[0] === this) continue;
+            if(this.doNotCollide[0] === i) continue;
             
             let dist = Math.sqrt(Math.pow(this.position.x - i.position.x, 2) + Math.pow(this.position.y - i.position.y, 2));
             
             if(dist < (this.radius + i.radius) / 2){
-                
                 this.bounce(i, dist);
             }
             
@@ -21,7 +28,7 @@ class CircleCollider extends Collider{
     }
 
     bounce(other, dist){
-        let previousVelocity = this.velocity.copy();
+        let previousVelocity = other.velocity.copy();
 
         let newVector = new Vector((other.position.x - this.position.x) / dist, (other.position.y - this.position.y) / dist); 
         
@@ -51,7 +58,7 @@ class CircleCollider extends Collider{
         }
         
         this.parent.bouncedThisFrame = true;
-        console.log(previousVelocity, this.velocity);
+        console.log(previousVelocity, other.velocity, this.MASS);
 
 
         // Landing code, will probably rewrite

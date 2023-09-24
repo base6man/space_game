@@ -1,6 +1,7 @@
 class Collider{
     constructor(parent){
         this.parent = parent;
+        this.doNotCollide = []
         currentScene.colliders.push(this);
     }
 
@@ -26,5 +27,9 @@ class Collider{
 
     get MASS(){
         return this.parent.MASS;
+    }
+
+    doNotCollideWith(newObject){
+        this.doNotCollide.push(newObject);
     }
 }

@@ -1,9 +1,24 @@
 class PhysicsObject{
-    constructor(position = new Vector(0, 0), velocity = new Vector(0, 0)){
+    constructor(position = null){
         this.position = position;
-        this.velocity = velocity;
+        this.collider;
 
         currentScene.physicsObjects.push(this);
+    }
+
+    update(){
+        // Nothing here now
+    }
+
+    get MASS(){
+        return 99999;
+    }
+}
+
+class KinematicObject extends PhysicsObject{
+    constructor(position = new Vector(0, 0), velocity = new Vector(0, 0)){
+        super(position);
+        this.velocity = velocity;
     }
 
     update(){
