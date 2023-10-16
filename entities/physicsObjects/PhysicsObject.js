@@ -13,6 +13,13 @@ class PhysicsObject{
     get MASS(){
         return 99999;
     }
+
+    delete(){
+        let myIndex = currentScene.physicsObjects.findIndex((x) => x === this);
+        currentScene.physicsObjects.pop(myIndex);
+
+        if(this.collider) this.collider.delete();
+    }
 }
 
 class KinematicObject extends PhysicsObject{

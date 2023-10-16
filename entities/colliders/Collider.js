@@ -32,4 +32,8 @@ class Collider{
     doNotCollideWith(newObject){
         this.doNotCollide.push(newObject);
     }
+
+    delete(){
+        currentScene.colliders.pop(currentScene.colliders.findIndex((x) => x === this));
+    }
 }
