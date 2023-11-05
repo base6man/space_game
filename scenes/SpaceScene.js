@@ -2,6 +2,7 @@ class SpaceScene extends Scene{
     constructor(){
         super();
 
+        this.animationObjects = []
         this.physicsObjects = []
         this.planetObjects = []
         this.colliders = []
@@ -10,6 +11,8 @@ class SpaceScene extends Scene{
             [] // Orbiters
         ]
         this.isOver = false;
+
+        this.debugCounter;
     }
 
     setup(){
@@ -25,7 +28,10 @@ class SpaceScene extends Scene{
 
     update(){
         super.update();
+
+        this.debugCounter = 0;
         
+        for(let i of this.animationObjects) i.update();
         for(let i of this.physicsObjects) i.update();
         for(let i of this.colliders) i.update();
     }
@@ -39,5 +45,7 @@ class SpaceScene extends Scene{
                 j.updateImage();
             }
         }
+
+        console.log(this.debugCounter);
     }
 }

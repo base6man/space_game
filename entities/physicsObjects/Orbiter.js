@@ -46,6 +46,8 @@ class Orbiter extends KinematicObject{
                 
             this.velocity.x -= (this.position.x - i.position.x) * time.deltaTime * gravityMagnitude;
             this.velocity.y -= (this.position.y - i.position.y) * time.deltaTime * gravityMagnitude;
+
+            i.animator.castShadow(i.position.subtract(this.position), this.radius);
         }
         this.acceleration.x = (this.velocity.x - tempVelocity.x) * STEPS;
         this.acceleration.y = (this.velocity.y - tempVelocity.y) * STEPS;
