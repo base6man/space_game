@@ -22,7 +22,7 @@ class Orbiter extends KinematicObject{
     }
 
     get planets(){
-        return currentScene.planetObjects;
+        return currentScene.gravityObjects;
     }
 
     get MASS(){

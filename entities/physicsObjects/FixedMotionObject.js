@@ -66,7 +66,7 @@ class FixedMotionObject extends PhysicsObject{
         return Vector.fromPseudovector(radius, angle);
     }
 
-    static stillMotion(time, position){
+    static noMotion(time, position){
         return position;
     }
 }

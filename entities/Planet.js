@@ -17,7 +17,7 @@ class Planet{
         this.animator.drawGravityField(this.MASS)
 
         currentScene.imageObjects[0].push(this);
-        currentScene.planetObjects.push(this);
+        currentScene.gravityObjects.push(this);
     }
 
     get position(){

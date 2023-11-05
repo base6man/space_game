@@ -40,17 +40,14 @@ class Walker extends PhysicsObject{
     }
 
     get velocity(){
-        if(this.motion(...this.args) == 0)
-            return this.parent.velocity;
+        //if(this.motion(...this.args) == 0)
+        //    return this.parent.velocity;
 
         let velocityAngle = this.angle + Math.PI/2
-        if(this.motion(...this.args) < 0)
-            velocityAngle += Math.PI;
 
-        let velocitySpeed = this.motion(...this.args) * 2*Math.PI * this.distanceToParent;
+        let velocitySpeed = this.motion(...this.args) * this.distanceToParent;
 
         let myVelocity = Vector.fromPseudovector(velocitySpeed, velocityAngle);
-        console.log(this.parent.velocity, myVelocity);
         return this.parent.velocity.add(myVelocity);
     }
 
@@ -71,10 +68,19 @@ class Walker extends PhysicsObject{
     }
 
     static playerInputMotion(speed){
-        return this.getPlayerInput().x * speed / this.parent.radius;
+        return this.getPlayerInput().x * speed / this.distanceToParent;
+    }
+
+    static fixedMotion(speed){
+        return speed / this.distanceToParent;
     }
 
     static noMotion(){
         return 0;
+    }
+
+    delete(){
+        super.delete();
+        currentScene.imageObjects[1].pop(currentScene.imageObjects[1].findIndex((x) => x === this));
     }
 }
