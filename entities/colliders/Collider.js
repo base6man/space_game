@@ -1,8 +1,13 @@
 class Collider{
     constructor(parent){
         this.parent = parent;
+        this.isDeleted = false;
         this.doNotCollide = []
         currentScene.colliders.push(this);
+    }
+
+    update(){
+        console.assert(!this.parent.isDeleted);
     }
 
     get colliders(){
@@ -34,6 +39,13 @@ class Collider{
     }
 
     delete(){
-        currentScene.colliders.pop(currentScene.colliders.findIndex((x) => x === this));
+        for(let i = 0; i < currentScene.colliders.length; i++){
+            if(currentScene.colliders[i] === this) {
+                currentScene.colliders[i].isDeleted = true;
+                currentScene.colliders.pop(i);
+                break;
+            }
+        }
+        console.assert(this.isDeleted);
     }
 }

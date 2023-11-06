@@ -7,6 +7,8 @@ class CircleCollider extends Collider{
     }
 
     update(){
+        super.update();
+        
         for(let i of this.colliders){
             if(i === this) continue;
 
@@ -57,34 +59,7 @@ class CircleCollider extends Collider{
             i++
         }
         
-        this.parent.bouncedThisFrame = true;
-
-
-        // Landing code, will probably rewrite
-        /*
-        let velocityDiff = Math.sqrt(
-            Math.pow(this.velocity.x - this.velocity.x, 2) +
-            Math.pow(this.velocity.y - this.velocity.y, 2));
-
-        if(velocityDiff < 100){
-
-            if(this.isEarth){
-                this.velocity.x = this.velocity.x;
-                this.velocity.y = this.velocity.y;
-            }
-            else if (other.isEarth){
-                this.velocity.x = this.velocity.x;
-                this.velocity.y = this.velocity.y;
-            }
-            else{
-                let tempxVel = this.velocity.x;
-                let tempyVel = this.velocity.y;
-                this.velocity.x += 2*(this.velocity.x - this.velocity.x);
-                this.velocity.y += 2*(this.velocity.y - this.velocity.y);
-                this.velocity.x += 2*(tempxVel - this.velocity.x);
-                this.velocity.y += 2*(tempyVel - this.velocity.y);
-            }
-        }
-        */
+        this.parent.onBounce(other.parent);
+        other.parent.onBounce(this.parent);
     }
 }

@@ -6,15 +6,24 @@ class Camera{
     }
 
     setTarget(target){
-        this.target = target
-        this.position = new Vector(this.target.position.x - width/this.zoom/2, this.target.position.y - height/this.zoom/2)
+        this.target = target;
+        let targetPosition = this.getTargetPosition();
+        this.position = new Vector(targetPosition.x - width/this.zoom/2, targetPosition.y - height/this.zoom/2)
+    }
+
+    getTargetPosition(){
+        if(this.target.getCameraPosition()){
+            return this.target.getCameraPosition();
+        }
+        return this.target.position;
     }
 
     update(){
-        this.position.x = (this.position.x + (this.target.position.x - width / this.zoom / 2) / 10) / 1.1
-        this.position.y = (this.position.y + (this.target.position.y - height / this.zoom / 2) / 10) / 1.1
-        //this.position.x = this.target.position.x - width/this.zoom/2
-        //this.position.y = this.target.position.y - height/this.zoom/2
+        let targetPosition = this.getTargetPosition();
+        this.position.x = (this.position.x + (targetPosition.x - width / this.zoom / 2) / 10) / 1.1
+        this.position.y = (this.position.y + (targetPosition.y - height / this.zoom / 2) / 10) / 1.1
+        //this.position.x = targetPosition.x - width/this.zoom/2
+        //this.position.y = targetPosition.y - height/this.zoom/2
     }
 
     /*

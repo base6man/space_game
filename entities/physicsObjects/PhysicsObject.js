@@ -7,6 +7,7 @@ class PhysicsObject{
     }
 
     update(){
+        console.assert(!this.isDeleted);
         // Nothing here now
     }
 
@@ -18,7 +19,13 @@ class PhysicsObject{
         let myIndex = currentScene.physicsObjects.findIndex((x) => x === this);
         currentScene.physicsObjects.pop(myIndex);
 
-        if(this.collider) this.collider.delete();
+        if(this.collider) {
+            console.log("Deleting collider!");
+            this.collider.delete();
+        }
+        else{
+            console.log("No collider!");
+        }
     }
 }
 

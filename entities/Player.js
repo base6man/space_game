@@ -12,14 +12,16 @@ class Player{
 
         this.radius = radius;
 
+        this.launchSpeed = 1000;
+        this.walkSpeed = 250;
+
         if(startingPlanet){
-            this.walker = new Walker(startingPlanet, startingPosition, Walker.playerInputMotion, [100], this.radius);
+            this.walker = new Walker(startingPlanet, startingPosition, Walker.playerInputMotion, [this.walkSpeed], this.radius);
         }
         else{
             this.orbiter = new Orbiter(this.radius, startingPosition, orbitVelocity);
         }
 
-        this.launchSpeed = 1000;
 
         currentScene.inputObjects.push(this);
     }
@@ -27,12 +29,16 @@ class Player{
     update(){
         if(KeyReader.space && this.walker){
             this.launch();
+            return;
+        }
+        if(KeyReader.holdSpace && this.orbiter && this.orbiter.bouncedThisFrame){
+            this.land();
+            return;
         }
         if(keyIsDown(SHIFT)) stopUpdates = true;
     }
 
     launch(){
-        console.log("Hello!")
         let newVelocity = this.walker.velocity;
         newVelocity = newVelocity.add(Vector.fromPseudovector(this.launchSpeed, this.walker.angle));
 
@@ -43,5 +49,29 @@ class Player{
         this.walker = null;
         
         this.orbiter = new Orbiter(this.radius, newPosition, newVelocity);
+    }
+
+    land(){
+        let planet = this.orbiter.lastBouncedWith;
+        this.orbiter.delete();
+        this.orbiter = null;
+        
+        this.walker = new Walker(planet, 0, Walker.playerInputMotion, [this.walkSpeed], this.radius);
+        this.walker.debugMe = true;
+        this.walker.debugFunc();
+    }
+
+    get position(){
+        if(this.walker){
+            return this.walker.position;
+        }
+        return this.orbiter.position;
+    }
+
+    getCameraPosition(){
+        if(this.walker){
+            return this.walker.parent.position;
+        }
+        return this.position;
     }
 }

@@ -10,6 +10,8 @@ class Walker extends PhysicsObject{
     constructor(parent, startingAngle, motion, args, radius){
         super();
 
+        this.debugList = currentScene.imageObjects[1];
+
         this.parent = parent.collider;
         this.motion = motion;
         this.args = args;
@@ -17,14 +19,21 @@ class Walker extends PhysicsObject{
 
         this.angle = startingAngle;
         
-        console.log(this.radius);
-        
         this.animator = new Animator(new Vector(this.radius + 5, this.radius + 5));
         this.animator.addImage(drawCircle(this.radius), new Vector(0, 0))
         currentScene.imageObjects[1].push(this);
 
         this.collider = new CircleCollider(this, radius);
         this.collider.doNotCollideWith(this.parent);
+
+        this.isDeleted = false;
+
+
+        this.debugMe = false;
+    }
+
+    debugFunc(){
+        console.log(this.debugList, currentScene.imageObjects[1]);
     }
 
     update(){
@@ -79,8 +88,21 @@ class Walker extends PhysicsObject{
         return 0;
     }
 
+    onBounce(other){
+        // do nothing!
+    }
+
     delete(){
         super.delete();
-        currentScene.imageObjects[1].pop(currentScene.imageObjects[1].findIndex((x) => x === this));
-    }
+        this.isDeleted = true;
+        // currentScene.imageObjects[1].pop(currentScene.imageObjects[1].findIndex((x) => x === this));
+        
+        for(let i = 0; i < currentScene.imageObjects[1].length; i++){
+            if(currentScene.imageObjects[1][i] === this) {
+                currentScene.imageObjects[1].pop(i);
+                return;
+            }
+        }
+        // throw new Error(e);
+    }    
 }

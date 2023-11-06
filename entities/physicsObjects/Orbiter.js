@@ -16,8 +16,8 @@ class Orbiter extends KinematicObject{
         this.friction = 0;
 
         
-
         this.bouncedThisFrame = false;
+        this.lastBouncedWith;
         this.previousVelocity = new Vector(0, 0)
     }
 
@@ -52,12 +52,31 @@ class Orbiter extends KinematicObject{
         this.acceleration.x = (this.velocity.x - tempVelocity.x) * STEPS;
         this.acceleration.y = (this.velocity.y - tempVelocity.y) * STEPS;
         
-        if(this.bouncedThisFrame) console.log(this.previousVelocity, this.velocity);
         this.bouncedThisFrame = false;
         this.previousVelocity = this.velocity.copy();
     }
 
     updateImage(){
         this.animator.updateImage(this.position);
+    }
+
+    onBounce(other){
+        this.lastBouncedWith = other;
+        this.bouncedThisFrame = true;
+    }
+
+    delete(){
+        super.delete();
+        this.isDeleted = true;
+        // currentScene.imageObjects[1].pop(currentScene.imageObjects[1].findIndex((x) => x === this));
+        //this.collider.delete();
+        
+        for(let i = 0; i < currentScene.imageObjects[1].length; i++){
+            if(currentScene.imageObjects[1][i] === this) {
+                currentScene.imageObjects[1].pop(i);
+                return;
+            }
+        }
+        throw new Error(e);
     }
 }
